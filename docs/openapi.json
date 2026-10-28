@@ -1,0 +1,1016 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "summary": "Register a user",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "EMAIL_ALREADY_REGISTERED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Log in and get an access token",
+        "description": "Use the token in Swagger via the Authorize button.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "INVALID_CREDENTIALS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/accounts": {
+      "post": {
+        "operationId": "AccountsController_create",
+        "summary": "Create an account",
+        "description": "The account belongs to the logged-in user. Balance always starts at 0. Sending `balance` (or any unknown field) is rejected.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Accounts"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/accounts/{accountId}": {
+      "get": {
+        "operationId": "AccountsController_findOne",
+        "summary": "Get one of your accounts",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_ACCOUNT_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ACCOUNT_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Accounts"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/accounts/{accountId}/balance": {
+      "get": {
+        "operationId": "AccountsController_getBalance",
+        "summary": "Get the current balance of one of your accounts",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_ACCOUNT_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ACCOUNT_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Accounts"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/accounts/{accountId}/transactions": {
+      "post": {
+        "operationId": "TransactionsController_create",
+        "summary": "Add a credit or debit transaction",
+        "description": "Creates the transaction and updates the balance atomically. Re-sending the same `reference_id` for this account returns 409 and changes nothing.",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR / INVALID_ACCOUNT_ID / INVALID_REQUEST_BODY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ACCOUNT_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "DUPLICATE_TRANSACTION",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "INSUFFICIENT_BALANCE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Transactions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "TransactionsController_list",
+        "summary": "Transaction history (latest first, paginated, optional type filter)",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Omit to return both types",
+            "schema": {
+              "enum": [
+                "credit",
+                "debit"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR (bad page/limit/type) / INVALID_ACCOUNT_ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ACCOUNT_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Transactions"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/transfers": {
+      "post": {
+        "operationId": "TransfersController_create",
+        "summary": "Transfer money between two accounts",
+        "description": "Writes a debit on the source and a credit on the destination in one database transaction. Either both legs are saved or neither is. The source account must be yours; the destination can be any account.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR / INVALID_TRANSFER",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ACCOUNT_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "DUPLICATE_TRANSACTION",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "INSUFFICIENT_BALANCE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Transfers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Transaction Ledger API",
+    "description": "Accounts, credit/debit transactions, balances, paginated history and transfers. Money values are returned as 2-decimal strings. Register and log in under Auth, then click Authorize and paste the access_token.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ezhil@example.com",
+            "maxLength": 255
+          },
+          "password": {
+            "type": "string",
+            "example": "S3cure-pass",
+            "minLength": 8,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "0192f1d1-0a1b-7c2d-8e3f-4a5b6c7d8e9f",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "example": "ezhil@example.com"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-10-28T10:15:30.123Z"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "created_at"
+        ]
+      },
+      "ErrorResponseDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 422
+          },
+          "error": {
+            "type": "string",
+            "example": "INSUFFICIENT_BALANCE",
+            "description": "Machine-readable error code"
+          },
+          "message": {
+            "type": "string",
+            "example": "Insufficient balance: available 100.00, requested 150.00"
+          },
+          "details": {
+            "type": "object",
+            "description": "Extra context, e.g. per-field validation errors"
+          },
+          "path": {
+            "type": "string",
+            "example": "/accounts/0192f1d2-.../transactions"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2026-10-27T10:15:30.123Z"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error",
+          "message",
+          "path",
+          "timestamp"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ezhil@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "S3cure-pass"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "TokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "Send as `Authorization: Bearer <access_token>`"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expires_in": {
+            "type": "number",
+            "example": 3600,
+            "description": "Lifetime in seconds"
+          }
+        },
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in"
+        ]
+      },
+      "CreateAccountDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Ezhil Kumar",
+            "maxLength": 255
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "AccountResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "0192f1d2-7c4e-7a3b-9f1e-2d3c4b5a6978",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ezhil Kumar"
+          },
+          "balance": {
+            "type": "string",
+            "example": "0.00",
+            "description": "Decimal string with 2 places"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-10-27T10:15:30.123Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "balance",
+          "created_at"
+        ]
+      },
+      "BalanceResponseDto": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "example": "0192f1d2-7c4e-7a3b-9f1e-2d3c4b5a6978",
+            "format": "uuid"
+          },
+          "balance": {
+            "type": "string",
+            "example": "150.00",
+            "description": "Decimal string with 2 places"
+          }
+        },
+        "required": [
+          "account_id",
+          "balance"
+        ]
+      },
+      "CreateTransactionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "credit",
+              "debit"
+            ],
+            "example": "credit"
+          },
+          "amount": {
+            "type": "number",
+            "example": 50.25,
+            "minimum": 0.01,
+            "description": "Up to 2 decimal places"
+          },
+          "description": {
+            "type": "string",
+            "example": "Salary for October",
+            "maxLength": 500
+          },
+          "reference_id": {
+            "type": "string",
+            "example": "INV-2026-0001",
+            "maxLength": 100,
+            "description": "Idempotency key, unique per account"
+          }
+        },
+        "required": [
+          "type",
+          "amount",
+          "reference_id"
+        ]
+      },
+      "TransactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "0192f1d3-1a2b-7c3d-8e4f-5a6b7c8d9e0f",
+            "format": "uuid"
+          },
+          "account_id": {
+            "type": "string",
+            "example": "0192f1d2-7c4e-7a3b-9f1e-2d3c4b5a6978",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "credit",
+              "debit"
+            ]
+          },
+          "amount": {
+            "type": "string",
+            "example": "50.00"
+          },
+          "description": {
+            "type": "object",
+            "example": "Salary for October",
+            "nullable": true
+          },
+          "reference_id": {
+            "type": "string",
+            "example": "INV-2026-0001"
+          },
+          "balance_after": {
+            "type": "string",
+            "example": "150.00",
+            "description": "Account balance right after this entry"
+          },
+          "transfer_id": {
+            "type": "object",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Set on transfer legs"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-10-27T10:15:30.123Z"
+          }
+        },
+        "required": [
+          "id",
+          "account_id",
+          "type",
+          "amount",
+          "description",
+          "reference_id",
+          "balance_after",
+          "created_at"
+        ]
+      },
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "example": 10
+          },
+          "total_records": {
+            "type": "number",
+            "example": 42
+          },
+          "total_pages": {
+            "type": "number",
+            "example": 5
+          }
+        },
+        "required": [
+          "page",
+          "limit",
+          "total_records",
+          "total_pages"
+        ]
+      },
+      "TransactionListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionResponseDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMetaDto"
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      },
+      "CreateTransferDto": {
+        "type": "object",
+        "properties": {
+          "from_account_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "0192f1d2-7c4e-7a3b-9f1e-2d3c4b5a6978"
+          },
+          "to_account_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "0192f1d2-8d5f-7b4c-a02f-3e4d5c6b7a89"
+          },
+          "amount": {
+            "type": "number",
+            "example": 30,
+            "minimum": 0.01,
+            "description": "Up to 2 decimal places"
+          },
+          "description": {
+            "type": "string",
+            "example": "Rent share",
+            "maxLength": 500
+          },
+          "reference_id": {
+            "type": "string",
+            "example": "TRF-2026-0001",
+            "maxLength": 100,
+            "description": "Used as the reference_id of both legs; must be unused on both accounts"
+          }
+        },
+        "required": [
+          "from_account_id",
+          "to_account_id",
+          "amount",
+          "reference_id"
+        ]
+      },
+      "TransferResponseDto": {
+        "type": "object",
+        "properties": {
+          "transfer_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from_account_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "to_account_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "string",
+            "example": "30.00"
+          },
+          "reference_id": {
+            "type": "string",
+            "example": "TRF-2026-0001"
+          },
+          "debit": {
+            "description": "Debit leg on the source account",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransactionResponseDto"
+              }
+            ]
+          },
+          "credit": {
+            "nullable": true,
+            "description": "Credit leg on the destination. `null` when the destination belongs to another user, because it shows their balance.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransactionResponseDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "transfer_id",
+          "from_account_id",
+          "to_account_id",
+          "amount",
+          "reference_id",
+          "debit",
+          "credit"
+        ]
+      }
+    }
+  }
+}

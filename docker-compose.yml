@@ -1,0 +1,26 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ledger-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ledger
+      MYSQL_USER: ledger
+      MYSQL_PASSWORD: ledger
+    # Lets the non-SUPER `ledger` user create the schema's triggers (e.g. when the tests rebuild it)
+    command: --log-bin-trust-function-creators=1
+    ports:
+      - '3307:3306'
+    volumes:
+      - ledger-mysql-data:/var/lib/mysql
+      # Run once, on first start: create `ledger_test`, then load the schema into `ledger`
+      - ./database/init/01-test-database.sql:/docker-entrypoint-initdb.d/01-test-database.sql:ro
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/02-schema.sql:ro
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-proot']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  ledger-mysql-data:
